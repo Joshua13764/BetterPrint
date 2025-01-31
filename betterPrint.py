@@ -1,4 +1,7 @@
+import plottingAndRegression
+
 from tabulate import tabulate
+
 
 # Main printing function
 def bprint(*args,
@@ -10,6 +13,11 @@ def bprint(*args,
 
            # Tabulate headers will allow the data to be tabulated
            headers = False,
+
+           # 2 List / Array settings
+
+           # Plots the data in either "line" or "scatter" modes
+           plot = False,
 
            **kwargs):
 
@@ -23,6 +31,8 @@ def bprint(*args,
         outputString = tabulate(args[0], headers=headers, **kwargs)
         print(outputString)
 
+    if plot:
+        plottingAndRegression.plot(plot, *args, **kwargs)
 
 if __name__ == "__main__":
 
@@ -31,3 +41,6 @@ if __name__ == "__main__":
 
     # Tabulate test
     bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
+
+    # Plot test
+    bprint([i for i in range(10)], [i * 1.2 + 0.3 for i in range(10)], plot="scatter")
