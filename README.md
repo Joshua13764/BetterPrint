@@ -46,3 +46,21 @@ example code: ```bprint("Timestamp test", savePath="log1.log")```
 output (in created log1.log file):
 ```2025-02-01 15:49:21.967054	Timestamp test```
 
+
+#### ```dictTable```
+
+_Will dictionary as a table of keys and values_
+
+example code: ```bprint({i : chr(i) for i in range(80, 84)}, dictTable = True)```
+
+output (in created log1.log file):
+```
+keys  values
+------  --------
+    80  P
+    81  Q
+    82  R
+    83  S
+```
+
+
