@@ -4,10 +4,12 @@ from tools import existsAndTrue
 
 # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
 def zfillList(args : tuple, kwargs : dict) -> str:
+    
     return "[" + ", ".join([str(item).zfill(kwargs["zfillList"]) for item in args[0]]) + "]"
 
 # Tabulate the array
 def tabulateArray(args : tuple, kwargs : dict) -> str:
+
     # Extract the headers and remove entry from kwargs
     headers = kwargs.pop("headers")
 

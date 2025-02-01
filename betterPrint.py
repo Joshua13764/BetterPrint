@@ -63,3 +63,6 @@ if __name__ == "__main__":
     bprint("Timestamp test", timeStamp=True, savePath="log1.log")
     bprint("Timestamp test2", timeStamp=False, savePath="log2.log", noPrint=True)
     bprint("Timestamp test3", timeStamp=True, savePath="log1.log")
+
+    # Dict table test
+    bprint({i : chr(i) for i in range(80, 84)}, dictTable = True)
