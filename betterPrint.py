@@ -11,7 +11,7 @@ def _existsAndTrue(kwargs : dict, key : str):
     return key in kwargs and kwargs[key]
 
 # Main printing function
-def bprint(*args, savePath = None, noPrint = False, **kwargs):
+def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
 
     # ======================= List / Array settings
 
@@ -21,13 +21,18 @@ def bprint(*args, savePath = None, noPrint = False, **kwargs):
 
     # Tabulate headers will allow the data to be tabulated
     elif _existsAndTrue(kwargs, "headers"):
-        outputString = tabulate(args[0], headers=kwargs["headers"], **kwargs)
+
+        # Extract the headers and remove entry from kwargs
+        headers = kwargs.pop("headers")
+
+        # Create the output string
+        outputString = tabulate(args[0], headers=headers, **kwargs)
 
     # ======================= 2 List / Array settings
 
     # Plots the data in either "line" or "scatter" modes
-    elif _existsAndTrue(kwargs, "plot"):
-        plottingAndRegression.plot(kwargs["plot"], *args, **kwargs)
+    elif plot:
+        plottingAndRegression.plot(plot, *args, **kwargs)
         outputString = "Plotted the data"
 
     # Expect args to be a tuple of strings
@@ -42,7 +47,7 @@ def bprint(*args, savePath = None, noPrint = False, **kwargs):
 
     # Save the output string as a file (if is a plot will save the plot with the given file name
     # this is handled by plottingAndRegression)
-    if savePath and (not _existsAndTrue(kwargs, "plot")):
+    if savePath and (not plot):
         logObject.saveToLogger(outputString, savePath)
 
     # print the output string at the end
@@ -55,7 +60,7 @@ if __name__ == "__main__":
     bprint([i for i in range(10)], zfillList=5)
 
     # Tabulate test
-    # bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
+    bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
 
     # Plot test
     # bprint([i for i in range(10)], [i * 1.2 + 0.3 for i in range(10)], plot="scatter")
