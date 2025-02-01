@@ -1,43 +1,36 @@
-from tabulate import tabulate
+
 from datetime import datetime
 
 import plottingAndRegression
 from loggingPrint import LoggingObject
+from listPrintFunctions import runListPrintFunctions
 
 logObject = LoggingObject()
 
-# Checks the kwarg exists and is true otherwise returns False
+# Private function checks the kwarg exists and is true otherwise returns False
 def _existsAndTrue(kwargs : dict, key : str):
     return key in kwargs and kwargs[key]
 
 # Main printing function
 def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
 
-    # ======================= List / Array settings
+    # Set intitial value for outputString
 
-    # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
-    if type(args[0]) == list and _existsAndTrue(kwargs, "zfillList"):
-        outputString = "[" + ", ".join([str(item).zfill(kwargs["zfillList"]) for item in args[0]]) + "]"
-
-    # Tabulate headers will allow the data to be tabulated
-    elif _existsAndTrue(kwargs, "headers"):
-
-        # Extract the headers and remove entry from kwargs
-        headers = kwargs.pop("headers")
-
-        # Create the output string
-        outputString = tabulate(args[0], headers=headers, **kwargs)
+    outputString = " ".join([str(arg) for arg in args])
 
     # ======================= 2 List / Array settings
 
     # Plots the data in either "line" or "scatter" modes
-    elif plot:
+    if plot:
         plottingAndRegression.plot(plot, *args, **kwargs)
         outputString = "Plotted the data"
 
-    # Expect args to be a tuple of strings
-    else:
-        outputString = " ".join(args)
+    # ======================= List / Array settings
+
+    # Try list print functions
+    res = runListPrintFunctions(*args, **kwargs)
+    if res != None:
+        outputString = res
 
     # ======================= General settings
 
@@ -55,6 +48,9 @@ def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
         print(outputString)
 
 if __name__ == "__main__":
+
+    # Basic print test
+    bprint("hello", "world")
 
     # zfillList test
     bprint([i for i in range(10)], zfillList=5)
