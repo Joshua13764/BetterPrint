@@ -19,11 +19,30 @@ _Will output the data in a table format_
 
 example code: ```bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')```
 
+#### ```plot```
+
+_Will output the data as a plt pyplot_
+
+example code: ```bprint([i for i in range(10)], [i * 1.2 + 0.3 for i in range(10)], plot="scatter")```
+
 output:
-```
-| Name   |   Age |
-|--------+-------|
-| John   |    38 |
-| Amy    |    24 |
-```
+```A straight line plot```
+
+#### ```timeStamp```
+
+_Will add the time stamp to the start of the printout_
+
+example code: ```bprint("Timestamp test", timeStamp=True)```
+
+output:
+```2025-02-01 15:49:21.968759      Timestamp test```
+
+#### ```savePath```
+
+_Will log the output to the designated log_
+
+example code: ```bprint("Timestamp test", savePath="log1.log")```
+
+output (in created log1.log file):
+```2025-02-01 15:49:21.967054	Timestamp test```
 
