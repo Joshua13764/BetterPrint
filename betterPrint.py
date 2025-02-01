@@ -9,26 +9,19 @@ logObject = LoggingObject()
 # Main printing function
 def bprint(*args,
            
-           # General settings
+           # ======================= General settings
 
-           # Save the printout to a text file
-           savePath = False,
-
-           # Add a timestamp to the printout
-           timeStamp = False,
+           savePath = False, # Save the printout to a text file
+           timeStamp = False, # Add a timestamp to the printout
            
-           # List / Array settings
+           # ======================= List / Array settings
 
-           # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
-           zfillList = False,
+           zfillList = False, # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
+           headers = False, # Tabulate headers will allow the data to be tabulated
 
-           # Tabulate headers will allow the data to be tabulated
-           headers = False,
+           # ======================= 2 List / Array settings
 
-           # 2 List / Array settings
-
-           # Plots the data in either "line" or "scatter" modes
-           plot = False,
+           plot = False, # Plots the data in either "line" or "scatter" modes
 
            **kwargs):
 
