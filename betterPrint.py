@@ -6,55 +6,48 @@ from loggingPrint import LoggingObject
 
 logObject = LoggingObject()
 
+# Checks the kwarg exists and is true otherwise returns False
+def _existsAndTrue(kwargs : dict, key : str):
+    return key in kwargs and kwargs[key]
+
 # Main printing function
-def bprint(*args,
-           
-           # ======================= General settings
+def bprint(*args, savePath = None, noPrint = False, **kwargs):
 
-           savePath = False, # Save the printout to a text file
-           timeStamp = False, # Add a timestamp to the printout
-           
-           # ======================= List / Array settings
+    # ======================= List / Array settings
 
-           zfillList = False, # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
-           headers = False, # Tabulate headers will allow the data to be tabulated
+    # Zfill list will print out all of the numbers in a list with the specified z fill (needs type list)
+    if type(args[0]) == list and _existsAndTrue(kwargs, "zfillList"):
+        outputString = "[" + ", ".join([str(item).zfill(kwargs["zfillList"]) for item in args[0]]) + "]"
 
-           # ======================= 2 List / Array settings
+    # Tabulate headers will allow the data to be tabulated
+    elif _existsAndTrue(kwargs, "headers"):
+        outputString = tabulate(args[0], headers=kwargs["headers"], **kwargs)
 
-           plot = False, # Plots the data in either "line" or "scatter" modes
+    # ======================= 2 List / Array settings
 
-           **kwargs):
-
-    # For zfill the list
-    if type(args[0]) == list and zfillList:
-        outputString = "[" + ", ".join([str(item).zfill(zfillList) for item in args[0]]) + "]"
-
-    # Tabulate data
-    elif headers:
-        outputString = tabulate(args[0], headers=headers, **kwargs)
-
-    # Plot the data
-    elif plot:
-        plottingAndRegression.plot(plot, *args, **kwargs)
+    # Plots the data in either "line" or "scatter" modes
+    elif _existsAndTrue(kwargs, "plot"):
+        plottingAndRegression.plot(kwargs["plot"], *args, **kwargs)
         outputString = "Plotted the data"
 
     # Expect args to be a tuple of strings
     else:
         outputString = " ".join(args)
 
-    ## Post outputString creation settings
+    # ======================= General settings
 
-    # Add a timeStamp
-    if timeStamp:
+    # Add a timestamp to the printout
+    if _existsAndTrue(kwargs, "timeStamp"):
         outputString = f"{datetime.now()}\t" + outputString
 
     # Save the output string as a file (if is a plot will save the plot with the given file name
     # this is handled by plottingAndRegression)
-    if savePath and (not plot):
+    if savePath and (not _existsAndTrue(kwargs, "plot")):
         logObject.saveToLogger(outputString, savePath)
 
     # print the output string at the end
-    print(outputString)
+    if not noPrint:
+        print(outputString)
 
 if __name__ == "__main__":
 
@@ -62,12 +55,12 @@ if __name__ == "__main__":
     bprint([i for i in range(10)], zfillList=5)
 
     # Tabulate test
-    bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
+    # bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
 
     # Plot test
     # bprint([i for i in range(10)], [i * 1.2 + 0.3 for i in range(10)], plot="scatter")
 
     # Timestamp test
-    bprint("Timestamp test", timeStamp=True, savePath="log1")
-    bprint("Timestamp test2", timeStamp=True, savePath="log2")
-    bprint("Timestamp test3", timeStamp=True, savePath="log1")
+    bprint("Timestamp test", timeStamp=True, savePath="log1.log")
+    bprint("Timestamp test2", timeStamp=False, savePath="log2.log", noPrint=True)
+    bprint("Timestamp test3", timeStamp=True, savePath="log1.log")
