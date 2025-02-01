@@ -39,13 +39,22 @@ output:
 
 #### ```savePath```
 
-_Will log the output to the designated log_
+_Will save the givne data_
 
-example code: ```bprint("Timestamp test", savePath="log1.log")```
+example code 1: ```bprint("Timestamp test", savePath="log1.log")```
 
 output (in created log1.log file):
 ```2025-02-01 15:49:21.967054	Timestamp test```
 
+example code 2: ```bprint("hello", savePath="outputA.pkl")```
+
+output (in created outputA.pkl file):
+```pickle file with the data for the string "hello"```
+
+example code 3: ```bprint(customObject = {1 : "a"}, savePath="outputB.pkl")```
+
+output (in created outputB.pkl file):
+```pickle file with the data for the dict {1 : "a"}```
 
 #### ```dictTable```
 
