@@ -5,10 +5,11 @@ from tools import existsAndTrue, checkFunctions
 import plottingAndRegression
 from listPrintFunctions import getFunctionDictionary as getListFuncs
 from dictPrintFunctions import getFunctionDictionary as getDictFuncs
+from objectPrintFunctions import probeObject
 import savingModule
 
 # Main printing function
-def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
+def bprint(*args, savePath = None, plot = False, noPrint = False, probe = False, **kwargs):
 
     # Set intitial value for outputString
     outputString = " ".join([str(arg) for arg in args])
@@ -17,6 +18,39 @@ def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
     if plot:
         plottingAndRegression.plot(plot, *args, **kwargs)
         outputString = "Plotted the data"
+
+    # If probe then probe
+    if probe:
+
+        # Step the probe
+        probeHistory = [args[0]]
+        lastCommand = None
+
+        # Iterate through object ultil None returned then exit
+        while True:
+
+            # Exit out of function
+            if lastCommand == "probeExitCommand":
+                return None
+
+            # Return back one step
+            if lastCommand == "probeHistoryReverseCommand":
+                probeHistory.pop()
+
+                # Output to the user if cannot return back one
+                if len(probeHistory) == 0:
+                    print("Cannot step back one")
+                    probeHistory = [args[0]]
+                
+                lastCommand = probeObject(probeHistory[-1])
+
+            # Then allow probe further
+            else:
+                lastCommand = probeObject(probeHistory[-1])
+
+            # Add record of probing
+            if lastCommand not in ["probeExitCommand", "probeHistoryReverseCommand"]:
+                probeHistory.append(lastCommand)
 
     # Find the functions to run
     functionsToRun = []
@@ -44,23 +78,6 @@ def bprint(*args, savePath = None, plot = False, noPrint = False, **kwargs):
 
 if __name__ == "__main__":
 
-    # # Basic print test
-    # bprint("hello", "world")
-
-    # # zfillList test
-    # bprint([i for i in range(10)], zfillList=5)
-
-    # # Tabulate test
-    # bprint([['John', 38], ['Amy', 24]], headers=['Name', 'Age'], tablefmt='orgtbl')
-
-    # # Plot test
-    # # bprint([i for i in range(10)], [i * 1.2 + 0.3 for i in range(10)], plot="scatter")
-
-    # # Timestamp test
-    # bprint("Timestamp test", timeStamp=True, savePath="log1.log")
-    # bprint("Timestamp test2", timeStamp=False, savePath="log2.log", noPrint=True)
-    # bprint("Timestamp test3", timeStamp=True, savePath="log1.log")
-
     # Dict table test
     bprint({i : chr(i) for i in range(80, 84)}, dictTable = True)
 
@@ -69,3 +86,21 @@ if __name__ == "__main__":
 
     # Write custom object as pickle file
     bprint(customObject = {1 : "a"}, savePath="outputB.pkl")
+
+    # Object probe example
+    class test():
+
+        def __init__(self):
+            self.a = "a"
+            self.b = 28
+
+        def ok(self):
+            self.c = test()
+
+        def mov(self, q):
+            return self.a + q
+        
+    testObj = test()
+    testObj.ok()
+
+    bprint(testObj, probe=True) 
